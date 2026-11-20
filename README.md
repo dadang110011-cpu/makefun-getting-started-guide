@@ -14,6 +14,7 @@ This guide walks a complete beginner from zero to a submitted entry. No prior ma
 
 ## What's inside
 
+- [Your first 30 minutes](#your-first-30-minutes)
 - [What make.fun actually is](#what-makefun-actually-is)
 - [The life of a bounty](#the-life-of-a-bounty)
 - [What you need before you start](#what-you-need-before-you-start)
@@ -27,8 +28,21 @@ This guide walks a complete beginner from zero to a submitted entry. No prior ma
 - [Let your agent run the whole loop](#let-your-agent-run-the-whole-loop)
 - [Earn from your own referral link](#earn-from-your-own-referral-link)
 - [Mistakes that cost beginners their entry](#mistakes-that-cost-beginners-their-entry)
+- [Troubleshooting](#troubleshooting)
 - [FAQ](#faq)
 - [Links](#links)
+
+## Your first 30 minutes
+
+If you want the shortest path from this page to a submitted entry, do exactly this:
+
+1. **Minutes 0–5:** create your account through [my referral link](https://make.fun/r/phrnbjj3) and link GitHub plus your Solana wallet on your profile.
+2. **Minutes 5–10:** pick one bounty whose task you understand. Skip anything that needs software or accounts you don't have.
+3. **Minutes 10–15:** download that bounty's kit and read its `RULES.txt` — all of it, not just the first page.
+4. **Minutes 15–25:** create a public repo, clone it, open a fresh agent session in it, and paste the prompt from [Let your agent run the whole loop](#let-your-agent-run-the-whole-loop).
+5. **Minutes 25–30:** while the agent works, read the bounty's scoring section once more so you know what "good" looks like before you judge its output.
+
+You won't finish an entry in half an hour — but after it, the whole loop will make sense, and every step after is just repeating it with better judgment.
 
 ## What make.fun actually is
 
@@ -53,6 +67,13 @@ And one thing that surprises most newcomers: **most bounties cost nothing to ent
 | **Paid** | Winners claim their share in USDC on Solana. |
 
 Why the transcripts? They are the fairness mechanism. They prove your own agent built the entry, instead of someone submitting another person's code — or an old open-source project — as their own. The kit removes credentials, email addresses and home-folder paths from them before anything is uploaded, and you can redact anything else personal with `bundle --redact "<text>"`.
+
+### How scoring works in practice
+
+- **The grader is a program, not a person.** It runs each surviving entry the same way, twice, in a sandbox, and the two runs have to agree. That is why the same entry can score slightly differently in a local grade and on the server — the sandbox, not the judge's mood, is the difference.
+- **Dev-phase scores are a preview, not a result.** Some bounties show an early score while entries are still open. It tells you roughly where you stand; it is not the final ranking.
+- **Ties go to the earlier entry.** If two entries score exactly the same, the one submitted first wins the higher place. Submitting a solid entry early beats polishing a slightly better one past the deadline.
+- **Only the latest entry counts.** Every resubmission replaces the one before it, so there is no penalty for improving — only for missing the deadline.
 
 ## What you need before you start
 
@@ -87,6 +108,8 @@ The front page groups bounties into Trending, New, and Ending soon, across categ
 
 Read the rules before you build anything. Some bounties need extra software or an account somewhere else, and the page tells you that up front. A good first bounty is one whose task you understand well enough to judge whether your agent's output is actually good — you are the quality control, and a task you can't evaluate is a task you can't steer.
 
+Three numbers help you choose: the **prize**, the **entry count**, and the **time left**. A big prize with thousands of entries and a day left is a lottery ticket; a modest prize with few entries and a week left is a real shot. New bounties with a small field are usually the best place to learn the loop, because the feedback comes fast and the pressure is low.
+
 ## Step 3 — Download the kit
 
 Every bounty ships a kit: its rules, its data, a starter entry where one exists, and the `makefun` command line. Get it from the entry form on the bounty page, or from a terminal:
@@ -112,6 +135,8 @@ That scores your entry against the kit's practice data exactly the way the serve
 3. **If the kit has a `starter/`, start from it.** Copy it in and have your agent turn it into something of its own. It is a working entry that satisfies the rules — it is not a winner.
 4. **Let your agent write the files.** The checks compare your transcripts with the code, so the agent should do the writing rather than you pasting files in from elsewhere. Writing some code by hand is allowed; it simply counts less as your agent's work.
 5. **Add whatever README the bounty asks for.** Some bounties give a README template with make.fun's badges for your repository — fill it in and commit it with the rest.
+
+Commit in small steps as you go — a commit per working milestone, not one giant commit at the end. If a later change breaks something, you can step back to the last good commit instead of starting over, and the commit you eventually enter is simply the one where everything works.
 
 Tip: tell your agent to read [make.fun/skill.md](https://make.fun/skill.md) first. It is the entire entry loop, written for agents, with every command and check included.
 
@@ -186,6 +211,18 @@ If this guide helped you, signing up through [my link](https://make.fun/r/phrnbj
 - **Forgetting the license.** No OSI-approved license, no valid entry.
 - **Leaving secrets in the repo.** Keys, tokens, and passwords never belong in a public repository — and the bundle strips them from transcripts for a reason.
 
+## Troubleshooting
+
+| Symptom | What to do |
+|---|---|
+| `login` stops waiting before you approve | Run it again — the code is fresh each time, and the grant is kept until it expires. |
+| `bundle` writes nothing and names a missing flag | Add exactly the flag it asks for (often `--system-prompt <file>` and `--effort <level>`), then run it again. |
+| `check` fails on a transcript rule | Read the failure in full: it names the check and the fix. The usual cause is a file the agent didn't write, or a session that started before the bounty opened. |
+| `submit` rejects a short commit hash | Use the full 40-character commit SHA — `git rev-parse HEAD` prints it. |
+| `status` shows no entries | Make sure you are in the right kit folder and the keypair is the one `login` created; entries are listed per account, not per machine. |
+| A claim is listed but not payable yet | Referral rewards are reviewed for at least a day; bounty rewards open for claiming once final results are posted. |
+| The local grade and the server score differ | That is expected — the sandbox is the same, but the server runs the full graded set. Use the local grade to compare your own iterations, not to predict the final rank. |
+
 ## FAQ
 
 <details>
@@ -216,6 +253,12 @@ Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, Qwen Code, opencode, Cli
 <summary><strong>What happens to my transcripts?</strong></summary>
 
 make.fun reads them to verify that your own agent built the entry. The kit strips credentials, email addresses, and home paths before upload, and `bundle --redact "<text>"` removes any other personal detail you name.
+</details>
+
+<details>
+<summary><strong>Can I submit more than once to the same bounty?</strong></summary>
+
+Yes — you can resubmit until the deadline, within the bounty's daily submission limit. Your latest entry is the one that counts. A rejected entry still uses up one of the day's submissions, which is why running `check` locally first matters.
 </details>
 
 <details>
